@@ -1,0 +1,82 @@
+# ==============================
+# RECOMMENDATION SYSTEM
+# Content-Based + Collaborative
+# ==============================
+
+# ------------------------------
+# CONTENT-BASED FILTERING DATA
+# ------------------------------
+movies = [
+    {"title": "Bahubali", "genre": "Action"},
+    {"title": "KGF", "genre": "Action"},
+    {"title": "Pushpa", "genre": "Action"},
+    {"title": "Jersey", "genre": "Drama"},
+    {"title": "Arjun Reddy", "genre": "Romance"},
+    {"title": "Dear Comrade", "genre": "Drama"}
+]
+
+def content_based_recommend(preferred_genre):
+    recommendations = []
+    for movie in movies:
+        if movie["genre"].lower() == preferred_genre.lower():
+            recommendations.append(movie["title"])
+    return recommendations
+
+
+# ------------------------------
+# COLLABORATIVE FILTERING DATA
+# ------------------------------
+ratings = {
+    "User1": {"Bahubali": 5, "KGF": 4},
+    "User2": {"Bahubali": 4, "Pushpa": 5},
+    "User3": {"KGF": 5, "Pushpa": 4}
+}
+
+def collaborative_recommend(user):
+    recommendations = {}
+
+    for other_user in ratings:
+        if other_user != user:
+            for movie, rating in ratings[other_user].items():
+                if movie not in ratings[user]:
+                    if movie not in recommendations:
+                        recommendations[movie] = rating
+                    else:
+                        recommendations[movie] = max(recommendations[movie], rating)
+
+    return list(recommendations.keys())
+
+
+# ------------------------------
+# MAIN PROGRAM
+# ------------------------------
+print("===== RECOMMENDATION SYSTEM =====")
+print("1. Content-Based Recommendation")
+print("2. Collaborative Recommendation")
+
+choice = int(input("Enter your choice (1 or 2): "))
+
+if choice == 1:
+    genre = input("Enter preferred genre (Action/Drama/Romance): ")
+    result = content_based_recommend(genre)
+
+    print("\nRecommended Movies:")
+    if result:
+        for movie in result:
+            print(movie)
+    else:
+        print("No movies found")
+
+elif choice == 2:
+    user = input("Enter user name (User1/User2/User3): ")
+    result = collaborative_recommend(user)
+
+    print(f"\nRecommended Movies for {user}:")
+    if result:
+        for movie in result:
+            print(movie)
+    else:
+        print("No recommendations found")
+
+else:
+    print("Invalid choice")
